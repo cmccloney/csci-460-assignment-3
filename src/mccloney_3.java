@@ -7,47 +7,68 @@ public class mccloney_3 {
 		Job T1 = new Job(1,3); //pass processing time as second argument
 		Job T2 = new Job(2,10); //smaller ID = more important
 		Job T3 = new Job(3,3);
-		int time = 0; //initial time
-		int[] arrival_times = {1,3,6,8,10,12,26}; //max of 10 job requests
-		int[] jobs = {3,2,3,1,2,3,1};
-		int index = 0; //index to keep track of which job is up
-		ArrayList<Job> queue = new ArrayList<Job>(); //queue of jobs if more than one arrives
-		boolean mutex = false;
 		
-		while(time <= arrival_times[arrival_times.length-1]+10) { //loop
-			boolean check = false;
-			if(index < jobs.length && time == arrival_times[index]) { //new job has arrived
-				if(jobs[index] == 1) { //setting jobs IDs and priorities
-					queue.add(new Job(jobs[index],3));
-					check = true;
-				}else if(jobs[index] == 2){
-					queue.add(new Job(jobs[index],10));
-				}else {
-					queue.add(new Job(jobs[index],3));
+		for(int i = 0; i < 4; i++) {
+			int[] arrival_times, jobs;
+			int counter, length;
+			if(i > 0) { //run the random inputs
+				System.out.println("Random input number " + i + ":");
+				length = (int )(Math.random() * 10 + 1); //find random length between 1 and 10
+				arrival_times = new int[length];
+				jobs = new int[length];
+				counter = 1;
+				arrival_times[0] = 1;
+				jobs[0] = (int )(Math.random() * 3 + 1);
+				while(counter < length) {
+					arrival_times[counter] = (int )(Math.random() * (10 + arrival_times[counter-1]) + arrival_times[counter-1]);
+					jobs[counter] = (int )(Math.random() * 3 + 1);
+					//System.out.println(arrival_times[counter]);
+					counter++;
 				}
-				if(check && queue.get(0).getID() == 2) { //if T2 has been preempted by T1
-					queue.get(0).print(time);
-					queue.remove(0);
-					Collections.sort(queue, new Sortbypriority()); //sort by priority
-					time++;
-				}
-				check = false;
-				if(queue.get(0).getID() == 3 && jobs[index] == 1) {
-					
-				}else {
-					Collections.sort(queue, new Sortbypriority()); //sort by priority
-				}
-				index++;
+			}else { //manual inputs
+				System.out.println("Manual input provided by assignment:");
+				arrival_times = new int[]{1,3,6,8,10,12,26};
+				jobs = new int[]{3,2,3,1,2,3,1};
 			}
-			if(!queue.isEmpty()) { //if a job is ready
-					int temp;
-					temp = queue.get(0).tick(); //process 1 ms of job
-					if(temp == 0) {
+			int time = 0; //initial time
+			int index = 0; //index to keep track of which job is up
+			ArrayList<Job> queue = new ArrayList<Job>(); //queue of jobs if more than one arrives
+			boolean mutex = false;
+			while(time <= arrival_times[arrival_times.length-1]+10) { //loop
+				boolean check = false;
+				if(index < jobs.length && time == arrival_times[index]) { //new job has arrived
+					if(jobs[index] == 1) { //setting jobs IDs and priorities
+						queue.add(new Job(jobs[index],3));
+						check = true;
+					}else if(jobs[index] == 2){
+						queue.add(new Job(jobs[index],10));
+					}else {
+						queue.add(new Job(jobs[index],3));
+					}
+					if(check && queue.get(0).getID() == 2) { //if T2 has been preempted by T1
 						queue.get(0).print(time);
 						queue.remove(0);
+						Collections.sort(queue, new Sortbypriority()); //sort by priority
+						time++;
 					}
+					check = false;
+					if(queue.get(0).getID() == 3 && jobs[index] == 1) {
+						
+					}else {
+						Collections.sort(queue, new Sortbypriority()); //sort by priority
+					}
+					index++;
+				}
+				if(!queue.isEmpty()) { //if a job is ready
+						int temp;
+						temp = queue.get(0).tick(); //process 1 ms of job
+						if(temp == 0) {
+							queue.get(0).print(time);
+							queue.remove(0);
+						}
+				}
+				time++;
 			}
-			time++;
 		}
 	}
 }
