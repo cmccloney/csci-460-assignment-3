@@ -7,26 +7,29 @@ public class mccloney_3 {
 		Job T1 = new Job(1,3); //pass processing time as second argument
 		Job T2 = new Job(2,10); //smaller ID = more important
 		Job T3 = new Job(3,3);
+		String[] output = new String[50]; //used for printing to text file
+		int output_index = 0;
 		
 		for(int i = 0; i < 4; i++) {
 			int[] arrival_times, jobs;
 			int counter, length;
 			if(i > 0) { //run the random inputs
-				System.out.println("Random input number " + i + ":");
+				output[output_index] = "Random input number " + i + ":";
+				output_index++;
 				length = (int )(Math.random() * 10 + 1); //find random length between 1 and 10
 				arrival_times = new int[length];
 				jobs = new int[length];
 				counter = 1;
-				arrival_times[0] = 1;
-				jobs[0] = (int )(Math.random() * 3 + 1);
-				while(counter < length) {
+				arrival_times[0] = 1; //set first value with random processor
+				jobs[0] = (int )(Math.random() * 3 + 1); //random processor
+				while(counter < length) { //instantiate array with random values
 					arrival_times[counter] = (int )(Math.random() * (10 + arrival_times[counter-1]) + arrival_times[counter-1]);
 					jobs[counter] = (int )(Math.random() * 3 + 1);
-					//System.out.println(arrival_times[counter]);
 					counter++;
 				}
 			}else { //manual inputs
-				System.out.println("Manual input provided by assignment:");
+				output[output_index] = "Manual input provided by assignment:";
+				output_index++;
 				arrival_times = new int[]{1,3,6,8,10,12,26};
 				jobs = new int[]{3,2,3,1,2,3,1};
 			}
@@ -46,7 +49,7 @@ public class mccloney_3 {
 						queue.add(new Job(jobs[index],3));
 					}
 					if(check && queue.get(0).getID() == 2) { //if T2 has been preempted by T1
-						queue.get(0).print(time);
+						output_index = queue.get(0).print(time,output,output_index);
 						queue.remove(0);
 						Collections.sort(queue, new Sortbypriority()); //sort by priority
 						time++;
@@ -63,12 +66,21 @@ public class mccloney_3 {
 						int temp;
 						temp = queue.get(0).tick(); //process 1 ms of job
 						if(temp == 0) {
-							queue.get(0).print(time);
+							output_index = queue.get(0).print(time,output,output_index);
 							queue.remove(0);
 						}
 				}
 				time++;
 			}
+		}
+		try {
+			PrintWriter writer = new PrintWriter("mccloney_3.output.txt","UTF-8");
+			for(int i = 0; i < output_index; i++) {
+				writer.println(output[i]);
+			}
+			writer.close();
+		}catch(IOException e) {
+			
 		}
 	}
 }
@@ -92,14 +104,15 @@ class Job {
 		return timeLeft;
 	}
 	
-	public void print(int time) {
+	public int print(int time, String[] output, int output_index) {
 		String s;
 		switch(ID) {
 			case 1:
 				s = "time ";
 				s += time;
 				s += ", T1111T1";
-				System.out.println(s);
+				output[output_index] = s;
+				output_index++;
 				break;
 			case 2:
 				s = "time ";
@@ -109,16 +122,19 @@ class Job {
 					s += "N";
 				}
 				s += "T2";
-				System.out.println(s);
+				output[output_index] = s;
+				output_index++;
 				timeLeft = 0;
 				break;
 			case 3:
 				s = "time ";
 				s += time;
 				s += ", T3333T3";
-				System.out.println(s);
+				output[output_index] = s;
+				output_index++;
 				break;
 		}
+		return output_index;
 	}
 	
 	public int getID() {

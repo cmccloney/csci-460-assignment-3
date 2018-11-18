@@ -1,0 +1,18 @@
+Manual input provided by assignment:
+time 8, T2NNNNNT2
+time 11, T1111T1
+time 21, T2NNNNNNNNNNT2
+time 22, T3333T3
+time 25, T3333T3
+time 28, T3333T3
+time 31, T1111T1
+Random input number 1:
+time 3, T3333T3
+time 19, T2NNNNNNNNNNT2
+time 25, T1111T1
+time 54, T3333T3
+Random input number 2:
+time 3, T3333T3
+time 7, T3333T3
+Random input number 3:
+time 10, T2NNNNNNNNNNT2
