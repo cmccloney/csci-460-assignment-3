@@ -16,7 +16,7 @@ public class mccloney_3 {
 			if(i > 0) { //run the random inputs
 				output[output_index] = "Random input number " + i + ":";
 				output_index++;
-				length = (int )(Math.random() * 10 + 1); //find random length between 1 and 10
+				length = (int )(Math.random() * 10 + 2); //find random length between 1 and 10
 				arrival_times = new int[length];
 				jobs = new int[length];
 				counter = 1;
@@ -28,7 +28,7 @@ public class mccloney_3 {
 					counter++;
 				}
 			}else { //manual inputs
-				output[output_index] = "Manual input provided by assignment:";
+				output[output_index] = "Manual input provided by assignment (also sequence where priority inversion occurs):";
 				output_index++;
 				arrival_times = new int[]{1,3,6,8,10,12,26};
 				jobs = new int[]{3,2,3,1,2,3,1};
